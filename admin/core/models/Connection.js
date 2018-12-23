@@ -177,7 +177,7 @@ const validate = async function(record, mode, custom) {
                     if (checkDB.status === "E") {
                     return {status: checkDB.status , message: checkDB.message};      
                     }
-                    newRecord["password"] = utils.encrypt(newRecord["password"]);
+                    newRecord["password"] = utils.encryptByKey(newRecord["password"],'connection');
                 }
 
                 return {status: status , message:message, record: newRecord};
@@ -219,7 +219,7 @@ const validate = async function(record, mode, custom) {
                     const passwd = newRecord["password"];
 
                     if (dbRecord["password"] === passwd) {
-                       newRecord["password"] = utils.decrypt(passwd);
+                       newRecord["password"] = utils.decryptByKey(passwd,'connection');
                     } 
                        
                     const checkDB = await utils.validateConnection(newRecord);

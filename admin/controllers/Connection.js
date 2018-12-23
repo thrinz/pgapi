@@ -132,7 +132,7 @@ const testDBConnection =  async function(req, res) {
         const record = req.query;    
         if (!!record.id && record.decrypt === 'Y') {
             const passwd = record["password"];
-            record["password"] = utils.decrypt(passwd);
+            record["password"] = utils.decryptByKey(passwd,'connection');
         }
         const response = await utils.validateConnection(record);
         res.json({status: response.status , message: response.message });  
@@ -150,7 +150,7 @@ const testDBConnections =  async function(req, res) {
     for (let i in connections) {
         const record = connections[i];    
         const passwd = record["password"];
-        record["password"] = utils.decrypt(passwd);
+        record["password"] = utils.decryptByKey(passwd,'connection');
         const response = await utils.validateConnection(record);
         if (response.status === "E") {
             output[record.id] = false;

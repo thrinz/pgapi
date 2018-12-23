@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Praveen Muralidhar",
+  "author": "Praveen Muralidhar (thrinz@gmail.com)",
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "ace-editor-on-vue": "^0.1.1",

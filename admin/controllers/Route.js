@@ -206,7 +206,7 @@ const addRoute = async function (routeObj) {
                     host: routeObj.host
                   , port: routeObj.port
                   , username: routeObj.username
-                  , password:  utils.decrypt(routeObj.password)
+                  , password:  utils.decryptByKey(routeObj.password,'connection')
                   , database: routeObj.database
                   , name:  routeObj.connection_name
                 };
@@ -224,7 +224,7 @@ const addRoute = async function (routeObj) {
                     host: routeObj.host
                   , port: routeObj.port
                   , username: routeObj.username
-                  , password:  utils.decrypt(routeObj.password)
+                  , password:  utils.decryptByKey(routeObj.password,'connection')
                   , database: routeObj.database
                   , name:  routeObj.connection_name
                 };
