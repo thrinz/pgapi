@@ -1,0 +1,519 @@
+{
+    "connections" : {
+        "name" : "connections",
+        "overwrite" : false ,
+        "columns" : {
+            "name" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["UNIQUE"],
+                "validate" : { "I" : ["UNIQUE","REQUIRED"] , "U" : ["UNIQUE_EXCLUDE","REQUIRED"], "D" : []},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "id" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["PRIMARY"],
+                "validate" : { "I" : ["REQUIRED"] , "U" : ["EXISTS" , "REQUIRED"], "D" : ["EXISTS","REQUIRED"]},
+                "insertable" : true,
+                "updatable" : false,
+                "selectable" : true,  
+                "default" : {"I" : {"value": "UUID" , "overwrite" : false } },
+                "primary" : true
+            },
+            "host" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED"] , "U" : ["REQUIRED"]},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "port" : {
+                "datatype" : "number",
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED","NUMBER"] , "U" : ["REQUIRED","NUMBER"]},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "database" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED"] , "U" : ["REQUIRED"]},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "username" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED"] , "U" : ["REQUIRED"]},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "password" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED"] , "U" : ["REQUIRED"]},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : false,
+                "primary" : false,
+                "encrypt" : true
+            },
+            "ref_source_id" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : [],
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "config_flag" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : [],
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "created" : {
+                "datatype" : "timestamp",
+                "tz_enabled" : true,
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED","DATE"]},
+                "insertable" : true,
+                "updatable" : false,
+                "selectable" : false,
+                "primary" : false,
+                "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+                "encrypt" : false
+            },
+            "updated" : {
+                "datatype" : "timestamp",
+                "tz_enabled" : true,
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED","DATE"] , "U" : ["REQUIRED","DATE"]},
+                "insertable" : true,
+                "updatable" : false,
+                "selectable" : false,
+                "primary" : false,
+                "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+                "encrypt" : false
+            }
+        }
+    },
+"functions" : {
+    "name" : "functions",
+    "overwrite" : false ,
+    "columns" : {
+        "name" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["PRIMARY"],
+            "validate" : { "I" : ["UNIQUE","REQUIRED"] , "U" : ["UNIQUE_EXCLUDE","REQUIRED"], "D" : []},
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "id" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["PRIMARY"],
+            "validate" : { "I" : ["REQUIRED"] , "U" : ["EXISTS" , "REQUIRED"], "D" : ["EXISTS","REQUIRED"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : true,  
+            "default" : {"I" : {"value": "UUID" , "overwrite" : false } },
+            "primary" : true
+        },
+        "connection_id" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["PRIMARY","$REF.CONNECTIONS(ID)"],
+            "validate" : { "I" : ["REQUIRED","$REF.CONNECTIONS-id,connection_id"] , "U" : ["REQUIRED","$REF.CONNECTIONS-id,connection_id"], "D" : []},
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "db_method" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED"] , "U" : ["REQUIRED"], "D" : []},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "ref_source_id" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : [],
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "created" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+            "encrypt" : false
+        },
+        "updated" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"] , "U" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+            "encrypt" : false
+        }
+    }
+},
+"routes" : {
+    "name" : "routes",
+    "overwrite" : false ,
+    "validate" : {"I" : ["UNIQUE(route_method,route_url)"],"U" : ["UNIQUE_EXCLUDE(route_method,route_url)"]},
+    "columns" : {
+        "name" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["PRIMARY"],
+            "validate" : { "I" : ["UNIQUE","REQUIRED"] , "U" : ["UNIQUE_EXCLUDE","REQUIRED"], "D" : []},
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "id" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["PRIMARY"],
+            "validate" : { "I" : ["REQUIRED"] , "U" : ["EXISTS" , "REQUIRED"], "D" : ["EXISTS","REQUIRED"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : true,  
+            "default" : {"I" : {"value": "UUID" , "overwrite" : false } },
+            "primary" : true
+        },
+        "function_id" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["PRIMARY","$REF.FUNCTIONS(ID)"],
+            "validate" : { "I" : ["REQUIRED","$REF.FUNCTIONS-id,function_id"] , "U" : ["REQUIRED","$REF.FUNCTIONS-id,function_id"], "D" : []},
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "route_method" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED", "LIST-GET;POST"] , "U" : ["REQUIRED", "LIST-GET;POST"], "D" : []},
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "enabled_flag" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : [] , "U" : ["REQUIRED"], "D" : []},
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "route_url" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","URL","UNIQUE"] , "U" : ["REQUIRED","URL","UNIQUE_EXCLUDE"], "D" : []},
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "ref_source_id" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : [],
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "description" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : [],
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "sample_response" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : [],
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "sample_request" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : [],
+            "insertable" : true,
+            "updatable" : true,
+            "selectable" : true,  
+            "primary" : false
+        },
+        "created" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+            "encrypt" : false
+        },
+        "updated" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"] , "U" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+            "encrypt" : false
+        }
+    }
+},
+    "users" : {
+        "name" : "users",
+        "overwrite" : false ,
+        "validate" : {"I" : ["UNIQUE(username)"],"U" : []},
+        "columns" : {
+            "username" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["PRIMARY"],
+                "validate" : { "I" : ["UNIQUE","REQUIRED"] , "U" : [], "D" : []},
+                "insertable" : true,
+                "updatable" : false,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "id" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["PRIMARY"],
+                "validate" : { "I" : ["REQUIRED"] , "U" : ["EXISTS" , "REQUIRED"], "D" : ["EXISTS","REQUIRED"]},
+                "insertable" : true,
+                "updatable" : false,
+                "selectable" : true,  
+                "default" : {"I" : {"value": "UUID" , "overwrite" : false } },
+                "primary" : true
+            },
+            "first_name" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : [],
+                "validate" : { "I" : [] , "U" : [], "D" : []},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "last_name" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : [],
+                "validate" : { "I" : [] , "U" : [], "D" : []},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "password" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED"] , "U" : [], "D" : []},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "hash" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : [],
+                "validate" : { "I" : [] , "U" : [], "D" : []},
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "ref_user_id" : {
+                "datatype" : "string",
+                "datalength": -1,
+                "constraints" : [],
+                "insertable" : true,
+                "updatable" : true,
+                "selectable" : true,  
+                "primary" : false
+            },
+            "created" : {
+                "datatype" : "timestamp",
+                "tz_enabled" : true,
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED","DATE"]},
+                "insertable" : true,
+                "updatable" : false,
+                "selectable" : false,
+                "primary" : false,
+                "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+                "encrypt" : false
+            },
+            "updated" : {
+                "datatype" : "timestamp",
+                "tz_enabled" : true,
+                "datalength": -1,
+                "constraints" : ["REQUIRED"],
+                "validate" : { "I" : ["REQUIRED","DATE"] , "U" : ["REQUIRED","DATE"]},
+                "insertable" : true,
+                "updatable" : false,
+                "selectable" : false,
+                "primary" : false,
+                "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+                "encrypt" : false
+            }
+        }
+},
+"tokens" : {
+    "name" : "users",
+    "overwrite" : false ,
+    "validate" : {"I" : ["UNIQUE(username)"],"U" : []},
+    "columns" : {
+        "token" : {
+            "datatype" : "string",
+            "datalength": -1,
+            "constraints" : ["PRIMARY"],
+            "validate" : { "I" : ["REQUIRED"] , "U" : ["EXISTS" , "REQUIRED"], "D" : ["EXISTS","REQUIRED"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : true,  
+            "primary" : true
+        },
+        "start_time" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+            "encrypt" : false
+        },
+        "user_id" : {
+            "datatype" : "string",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "encrypt" : false
+        },
+        "timeout_time" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"] , "U" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "encrypt" : false
+        },        
+        "created" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+            "encrypt" : false
+        },
+        "updated" : {
+            "datatype" : "timestamp",
+            "tz_enabled" : true,
+            "datalength": -1,
+            "constraints" : ["REQUIRED"],
+            "validate" : { "I" : ["REQUIRED","DATE"] , "U" : ["REQUIRED","DATE"]},
+            "insertable" : true,
+            "updatable" : false,
+            "selectable" : false,
+            "primary" : false,
+            "default" : {"I" : {"value": "NOW" , "overwrite" : false } , "U" : {"value": "NOW" , "overwrite" : false }  },
+            "encrypt" : false
+        }
+    }
+}
+}

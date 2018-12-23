@@ -1,0 +1,68 @@
+{
+    "application" :
+    {
+        "identifier" : "1a6d3a4f-446e-84d5-fd5d-cd83f5fdc57c"
+      , "name" : "Task Demo"
+      , "short_code" : "task"
+    } ,
+    "functions" :
+    [{
+        "name" : "create_task"
+      , "db_method" : "create_task"
+      , "routes" : [{
+         "name" : "Create Task" 
+       , "route_url" : "/api/task/create"
+       , "route_method" : "POST" 
+       , "sample_request" : "{\"name\":\"Task3\" , \"description\":\"Task Description 2\", \"priority\": 2, \"start_date\":\"2018-12-08 02:41:17\", \"due_date\":\"2018-12-12 01:31:10\"}" 
+       , "sample_response" : "{\"status\":\"S\",\"message\":\"OK\",\"result\":[{\"result\":{\"status\":\"S\",\"message\":\"OK\",\"id\":\"8003c392-d89a-e577-be11-5f42808cf28b\"}}]}"
+      }]
+      }, {
+        "name" : "create_bulk_tasks"
+      , "db_method" : "create_bulk_tasks"
+      , "routes" : [{
+         "name" : "Create Bulk Task" 
+       , "route_url" : "/api/tasks/bulk/create"
+       , "route_method" : "POST"  
+       , "sample_request" : "{\"tasks\": [{\"name\":\"Task4\" , \"description\":\"Task Description 4\", \"priority\": 2, \"start_date\":\"2018-12-08 02:41:17\", \"due_date\":\"2018-12-12 01:31:10\"},{\"name\":\"Task5\" , \"description\":\"Task Description 5\", \"priority\": 2, \"start_date\":\"2018-12-08 02:41:17\", \"due_date\":\"2018-12-12 01:31:10\"}]}"
+       , "sample_response" : "{\"status\":\"S\",\"message\":\"OK\",\"result\":[{\"result\":{\"status\":\"S\",\"message\":\"OK\"}}]}"
+      }]
+      } , {
+          "name" : "update_task"
+        , "db_method" : "update_task"
+        , "routes" : [{  
+           "name" : "Update Task" 
+         , "route_url" : "/api/task/update"
+         , "route_method" : "POST"  
+         , "sample_request" : "{\"id\":\"8003c392-d89a-e577-be11-5f42808cf28b\",\"name\":\"Task2\"}"
+         , "sample_response" : "{\"status\":\"S\",\"message\":\"OK\",\"result\":[{\"result\":{\"status\":\"S\",\"message\":\"OK\",\"rows_affected\":\"1\"}}]}"         
+         }]
+      } ,{
+           "name" : "delete_task"
+         , "db_method" : "delete_task"
+         , "routes" : [{
+           "name" : "Delete Task" 
+         , "route_url" : "/api/task/delete"
+         , "route_method" : "POST"  
+         , "sample_request" : "{\"id\":\"8003c392-d89a-e577-be11-5f42808cf28b\"}"
+         , "sample_response" : "{\"status\":\"S\",\"message\":\"OK\",\"result\":[{\"result\":{\"status\":\"S\",\"message\":\"OK\",\"rows_affected\":\"1\"}}]}"              
+         }] 
+      }, {
+          "name" : "select_task"
+        , "db_method" : "select_task"
+        , "routes" : [{
+          "name" : "Select Task" 
+        , "route_url" : "/api/tasks"
+        , "route_method" : "GET"  
+        , "sample_request" : ""
+        , "sample_response" : "{\"status\":\"S\",\"message\":\"OK\",\"result\":[{\"result\":{\"status\":\"S\",\"message\":\"OK\",\"data\":[{\"id\":\"d716a072-be43-2301-1d9e-80998bb0c95e\",\"name\":\"Task4\",\"description\":\"Task Description 4\",\"start_date\":\"2018-12-22T23:56:29.495069+05:30\",\"due_date\":\"2018-12-12T01:31:10+05:30\",\"priority\":2,\"created\":\"2018-12-22T23:56:29.495069+05:30\",\"updated\":\"2018-12-22T23:56:29.495069+05:30\"},{\"id\":\"4ee0bec0-f5df-e75e-9180-25dc216bd021\",\"name\":\"Task5\",\"description\":\"Task Description 5\",\"start_date\":\"2018-12-22T23:56:29.495069+05:30\",\"due_date\":\"2018-12-12T01:31:10+05:30\",\"priority\":2,\"created\":\"2018-12-22T23:56:29.495069+05:30\",\"updated\":\"2018-12-22T23:56:29.495069+05:30\"}]}}]}"
+      },
+      {
+        "name" : "Select Task By Id" 
+      , "route_url" : "/api/tasks/:id"
+      , "route_method" : "GET"  
+      , "sample_request": ""
+      , "sample_response" : "{\"status\":\"S\",\"message\":\"OK\",\"result\":[{\"result\":{\"status\":\"S\",\"message\":\"OK\",\"data\":[{\"id\":\"d716a072-be43-2301-1d9e-80998bb0c95e\",\"name\":\"Task4\",\"description\":\"Task Description 4\",\"start_date\":\"2018-12-22T23:56:29.495069+05:30\",\"due_date\":\"2018-12-12T01:31:10+05:30\",\"priority\":2,\"created\":\"2018-12-22T23:56:29.495069+05:30\",\"updated\":\"2018-12-22T23:56:29.495069+05:30\"}]}}]}"
+     }]
+     }
+    ]
+}
