@@ -152,10 +152,10 @@ const processConnections = async function(secretKey, connections, client) {
                 if ( record.encrypt === 'Y') {
                     let passwd = record.password;
                     let decryptPassword = utils.decryptByKey(passwd,secretKey);
-                    validation.record["password"] = utils.encrypt(decryptPassword);
+                    validation.record["password"] = utils.encryptByKey(decryptPassword, 'connection');
                 } else {
                     let passwd = record.password;
-                    validation.record["password"] = utils.encrypt(passwd);
+                    validation.record["password"] = utils.encryptByKey(passwd, 'connection');
                 }
                 
                 // do the insert

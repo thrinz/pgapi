@@ -145,7 +145,7 @@ const getClientByConnectionID = async function(connectionID) {
     const recordArray = await getSQLResults("SELECT * FROM CONNECTIONS WHERE id = $1",[connectionID]);
     let record = recordArray[0];
 
-    record["password"] = decrypt(record["password"]);
+    record["password"] = decryptByKey(record["password"],'connection');
 
     return getClientByRecord(record);
     
