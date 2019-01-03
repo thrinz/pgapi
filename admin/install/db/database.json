@@ -389,16 +389,6 @@
                 "selectable" : true,  
                 "primary" : false
             },
-            "hash" : {
-                "datatype" : "string",
-                "datalength": -1,
-                "constraints" : [],
-                "validate" : { "I" : [] , "U" : [], "D" : []},
-                "insertable" : true,
-                "updatable" : true,
-                "selectable" : true,  
-                "primary" : false
-            },
             "ref_user_id" : {
                 "datatype" : "string",
                 "datalength": -1,

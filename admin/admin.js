@@ -20,12 +20,25 @@ const program = require('commander');
 const { prompt } = require('inquirer');
 const dotenv   = require('dotenv');
 const path     = require('path');
-
+const utils = require('./Utils');
+const findUp = require('find-up');
 
 // Load env variables from .env file
 dotenv.config({
-  path: path.resolve(__dirname, '../../config.env')
+  path: findUp.sync('config.env')
 })
+
+
+// Load Runtime variables
+utils.loadRuntimeEnvVariables({
+  DB_HOST : process.env.PG_HOST || process.env.DB_HOST,
+  DB_USER: process.env.PG_USER || process.env.DB_USER,
+  DB_PASSWORD: process.env.PG_PASSWORD || process.env.DB_PASSWORD,
+  DB_NAME: process.env.PG_DATABASE || process.env.DB_NAME,
+  DB_PORT: process.env.PG_PORT || process.env.DB_PORT,
+  PGAPI_SECRET_KEY: process.env.TOKEN_SECRET_KEY || process.env.PGAPI_SECRET_KEY,
+  DEMO_INSTALL: process.env.DEMO_INSTALL || 'Y'
+});
 
 const userController = require('../admin/controllers/User');
 

@@ -21,7 +21,7 @@ const utils = require('../../Utils');
 const modelName = "users";
 const metadata = {
     insert : {
-          sql : 'INSERT INTO USERS (id,username,first_name,last_name,password,hash,ref_user_id,enabled_flag,created,updated) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+          sql : 'INSERT INTO USERS (id,username,first_name,last_name,password,ref_user_id,enabled_flag,created,updated) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)',
           params : function(record) {
             let uuid = "";
             
@@ -31,9 +31,9 @@ const metadata = {
                 uuid = record["id"];
             }
 
-            const userData = utils.saltHashPassword(record.password);
+            const passwordHash = utils.encryptPassword(record.password);
                          
-            return [uuid,record.username,record.first_name,record.last_name,userData.passwordHash,userData.salt,  record.ref_user_id, 'Y', record.created,record.updated];
+            return [uuid,record.username,record.first_name,record.last_name,passwordHash,record.ref_user_id, 'Y', record.created,record.updated];
           },
           failureMessage : function(e) {
               const status = 'E';

@@ -27,10 +27,10 @@ const colors = require('colors');
 process.env.VERSION  = process.env.VERSION || "1.0.0";
 
 const addAdminUser = async function () {
-    const userData = utils.saltHashPassword("admin");
+    const passwordHash = utils.encryptPassword("admin");
     const uuid = utils.getUUID();
     let sql = "SELECT add_admin_user($1, $2, $3) as result";
-    let params = [uuid,userData.salt,userData.passwordHash];
+    let params = [uuid,'',passwordHash];
     let response = await utils.callSQL(sql,params);
     return response;
   }
@@ -71,9 +71,9 @@ const addAdminUser = async function () {
         if (response.status === "S") {
           console.log(`pgAPI - Successfully installed application [${demoAppName}]`.green)
         } else {
-         console.log(`pgAPI - Application installation failed.. [${demoAppName}] - ${response.message}`.yellow)
+          console.log(`pgAPI - Application installation failed.. [${demoAppName}] - ${response.message}`.yellow)
         } 
-     }
+      }
     }   
  }
 

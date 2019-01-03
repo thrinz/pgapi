@@ -14,7 +14,6 @@ l_id text;
      ( id 
 , username 
 , password 
-, hash  
 , enabled_flag
 , created 
 , updated
@@ -23,7 +22,6 @@ l_id text;
        p_id
     , 'admin'
     , p_password
-    , p_hash
     , 'Y'
     , now()
     , now()   

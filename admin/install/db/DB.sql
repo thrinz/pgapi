@@ -52,7 +52,6 @@ CREATE TABLE IF NOT EXISTS USERS
 , first_name text
 , last_name text
 , password text NOT NULL
-, hash text NOT NULL
 , ref_user_id text 
 , enabled_flag text NOT NULL
 , created timestamp with time zone NOT NULL

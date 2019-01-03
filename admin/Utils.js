@@ -22,7 +22,7 @@ const { Client } = require('pg')
 const { Pool } = require('pg')
 const path = require('path');
 const fs = require('fs');
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 let pool;
 
@@ -202,26 +202,15 @@ const decryptObjectByKey = function (token, key){
   }
 }
 
-const genRandomString = function(length){
-  return crypto.randomBytes(Math.ceil(length/2))
-          .toString('hex') 
-          .slice(0,length);  
-};
+const encryptPassword = function(userPassword) {
+  const saltRounds = 10;
+  var salt = bcrypt.genSaltSync(saltRounds);
+  var hash = bcrypt.hashSync(userPassword, salt);
+  return hash;
+}
 
-const sha512 = function(password, salt){
-  var hash = crypto.createHmac('sha512', salt); 
-  hash.update(password);
-  var value = hash.digest('hex');
-  return {
-      salt:salt,
-      passwordHash:value
-  };
-};
-
-const saltHashPassword = function (userpassword) {
-  let salt = genRandomString(16); 
-  let passwordData = sha512(userpassword, salt);
-  return passwordData;
+const isValidPassword = function(userPassword, hash) {
+  return bcrypt.compareSync(userPassword, hash);
 }
 
 const validateFunction = async function(connectionId,name) {
@@ -780,46 +769,6 @@ var callSQL = async function (sql,params,pool) {
     return response;
 }
 
-const getAdminInfo = async function() {
-  var filename = path.resolve(__dirname, '../admin/config/admin');
-  var properties = require ("properties");
- 
-  properties.parse (filename, { path: true }, function (error, obj){
-    if (error) return {};
-    return obj
-    //{ a: 1, b: 2 }
-  });
-}
-
-const checkAdminInfo = async function() {
-
-  var filename = path.resolve(__dirname, '../admin/config/admin');
-  var properties = require ("properties");
- 
-  properties.parse (filename, { path: true }, function (error, adminObj){
-    if (error) return {};
-
-    let filename = path.resolve(__dirname, '../admin/config/admin');
-  
-    if (!!adminObj && adminObj["username"]) {
-      let str = ""
-      if (adminObj["encrypt"] === "N") {
-        let token = jwt.sign( {password: adminObj["password"] , username: adminObj["username"]} , process.env.PGAPI_SECRET_KEY);
-        str = str + "username=" + adminObj["username"] + "\n";
-        str = str + "password=" + token + "\n";
-        str = str + "encrypt=Y" + "\n";
-        fs.writeFile(filename,str,function (err) {
-          if (err) {
-            console.log("Error writing file: " + err);
-          }
-      });
-      }
-    }
-
-  });
-  
-}
-
 const getModelMetadata = function(modelName) {
   var filename = path.resolve(__dirname, '../admin/install/db/database.json');
 
@@ -1085,7 +1034,6 @@ const executeDBFunctionsFromDir = async function (folderPath) {
 }
 
 const loadRuntimeEnvVariables = function (variables) {
-
    process.env.pgapi = JSON.stringify(variables);
    process.env.PGAPI_SECRET_KEY = variables.PGAPI_SECRET_KEY;
    process.env.DEMO_INSTALL = variables.DEMO_INSTALL;
@@ -1121,14 +1069,10 @@ const loadRuntimeEnvVariables = function (variables) {
     encrypt: encrypt,
     decrypt: decrypt,
     decryptByKey: decryptByKey,
-    sha512: sha512,
-    saltHashPassword: saltHashPassword,
     validateFunction: validateFunction,
     exportConfig: exportConfig,
     encryptByKey: encryptByKey,
     getPool: getPool,
-    getAdminInfo: getAdminInfo,
-    checkAdminInfo: checkAdminInfo,
     encryptObject: encryptObject,
     encryptObjectByKey: encryptObjectByKey,
     decryptObjectByKey: decryptObjectByKey,
@@ -1139,5 +1083,7 @@ const loadRuntimeEnvVariables = function (variables) {
     executeDBFunctionsFromDir: executeDBFunctionsFromDir,
     loadDDL: loadDDL,
     loadDBFunctionString: loadDBFunctionString,
-    installApplication: installApplication
+    installApplication: installApplication,
+    isValidPassword: isValidPassword,
+    encryptPassword: encryptPassword
  }

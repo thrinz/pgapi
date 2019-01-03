@@ -30,8 +30,8 @@ const resetPassword = async function(username, userPassword , confirmPassword) {
            // let response = await model.updatePassword({id: dbRecord.id , })
            if (!!dbRecord && !!dbRecord.result && dbRecord.result.length > 0) {
              let record = dbRecord.result[0];
-             let encryptedPassword = utils.sha512(userPassword, record.hash);
-             let response = await model.updatePassword({password: encryptedPassword.passwordHash, id: record.id });
+             let encryptedPassword = utils.encryptPassword(userPassword);
+             let response = await model.updatePassword({password: encryptedPassword , id: record.id });
              return response;
            } else {
              return {status: "ERROR" , message: "Unable to reset the Password"};
@@ -62,9 +62,7 @@ const validateLogin = async function(username, password) {
 
     let record = dbRecord.result[0];
 
-    let encryptedPassword = utils.sha512(password, record.hash);
-
-    if (encryptedPassword.passwordHash === record.password) {
+    if (utils.isValidPassword(password,record.password)) {
         // valid login
         return {status:"S",message: "OK", record: record};
     } else {
@@ -90,8 +88,8 @@ const resetPasswordAPI = async function(req, res) {
                 // let response = await model.updatePassword({id: dbRecord.id , })
                 if (!!dbRecord && !!dbRecord.result && dbRecord.result.length > 0) {
                   let record1 = dbRecord.result[0];
-                  let encryptedPassword = utils.sha512(userPassword, record1.hash);
-                  let response = await model.updatePassword({password: encryptedPassword.passwordHash, id: record1.id });
+                  let encryptedPassword = utils.encryptPassword(userPassword);
+                  let response = await model.updatePassword({password: encryptedPassword, id: record1.id });
                   res.json( response);
                   res.end(); 
                   return;
@@ -265,6 +263,7 @@ const addUser = async function(record) {
 }
 
 const addUserCommand = async function(record) {
+    console.log("Adding user");
     let response = await addUser(record);
 
     if (response.status === "E") {
