@@ -21,6 +21,7 @@ const uuidv1 = require('uuid/v1');
 const { Client } = require('pg')
 const { Pool } = require('pg')
 const path = require('path');
+const Q = require("q");
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -273,12 +274,14 @@ const validateConnection = async function(record) {
           port: record["port"],
           database: record["database"],
           user: record["username"],
-          password: record["password"]
+          password: record["password"],
+          ssl: record["ssl"]
         });
       await client.connect();
       client.end()
       return {status: "S" , message: "OK"};  
     } catch(e) {
+      console.log(e)
       return {status: "E" , message: "Invalid Database Connection Information"} 
     }
     
@@ -1033,10 +1036,81 @@ const executeDBFunctionsFromDir = async function (folderPath) {
 
 }
 
+const sendSMS = function(msgArray) {
+  let provider = process.env.SMS_PROVIDER;
+  var defered = Q.defer();
+
+  if (!!provider) {
+    let pArray = provider.split(';')
+    if (pArray[0] === 'twilio') {
+      var client = require('twilio')(pArray[1], pArray[2]);
+
+      for (var k in msgArray) {
+        var msg = msgArray[k];
+        console.log("tokenInfo.to " + msg.to);
+        console.log("tokenInfo.body " + msg.body);
+
+        client.messages.create({
+          to: msg.to,
+          from: "+17149784642 ",
+          body: msg.body,
+        }, function (err, message) {
+
+
+          if (err) {
+            console.log("Error sending SMS " + err);
+            defered.resolve({ status: "ERROR", message: "Error sending SMS" });
+          }
+          else {
+            console.log(message.sid);
+            defered.resolve({ status: "SUCCESS", message: "OK" });
+          }
+
+        });
+
+      }
+
+    }
+  } else {
+    console.log('SMS Provider is not setup. Unable to send SMS');
+    defered.resolve({ status: "ERROR", message: "SMS Provider is not setup. Unable to send SMS" });
+  }
+
+  return defered.promise;
+
+}
+
+const handlePrivate = function (pData, result, req, res) {
+
+  var defered = Q.defer();
+  var promises = [];
+
+  var resultObj = result;
+
+  if (pData && pData.SMS) {
+    var p6 = sendSMS(pData.SMS);
+
+    p6.then(function (output) {
+
+      defered.resolve({ status: "SUCCESS", message: "OK" });
+      //delete resultObj.private;
+      return defered.promise;
+
+    });
+
+    promises.push(p6);
+
+    //delete resultObj.private;
+  }
+
+  return Q.all(promises);
+}
+
 const loadRuntimeEnvVariables = function (variables) {
    process.env.pgapi = JSON.stringify(variables);
    process.env.PGAPI_SECRET_KEY = variables.PGAPI_SECRET_KEY;
    process.env.DEMO_INSTALL = variables.DEMO_INSTALL;
+   process.env.SMS_PROVIDER = variables.SMS_PROVIDER;
 }
 
  module.exports = {
@@ -1085,5 +1159,7 @@ const loadRuntimeEnvVariables = function (variables) {
     loadDBFunctionString: loadDBFunctionString,
     installApplication: installApplication,
     isValidPassword: isValidPassword,
-    encryptPassword: encryptPassword
+    encryptPassword: encryptPassword,
+    sendSMS: sendSMS,
+    handlePrivate: handlePrivate
  }

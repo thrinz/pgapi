@@ -154,7 +154,18 @@ const callDB = async function(req, res, routeCallback,contentType,pool) {
 
     let response = await utils.getSQLResultswithStatus(queryString,[ JSON.stringify(data)], pool);
 
-    return res.json(response);
+    if (!!response.result && !!response.result[0] && !!response.result[0].result && !!response.result[0].result.private) {
+        let privateInfo = response.result[0].result.private
+        utils.handlePrivate(privateInfo, response.result[0].result, req, res).then(function (data) {
+        delete response.result[0].result.private;
+        res.json(response);
+        });
+
+    } else {
+        return res.json(response);
+    }
+
+    
 
 }
 

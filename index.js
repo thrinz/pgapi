@@ -34,7 +34,6 @@ const adminRouter = () => {
 const apiRouter = (router) => {
     global.pool = {};
     global.router = router;
-
     const s = routeHandler.getRoutes();  
 }
 
@@ -55,14 +54,21 @@ const initialize = async (input) => {
                 DB_PORT: input.DB_PORT,
                 PGAPI_SECRET_KEY: input.PGAPI_SECRET_KEY,
                 DEMO_INSTALL: input.DEMO_INSTALL,
+                SMS_PROVIDER: input.SMS_PROVIDER
             });
+
+            // let ssl = false;
+
+            // if (!!input.DB_SSL && input.DB_SSL === 'Y') {
+            //     ssl = true;
+            // }
             
             let response = await utils.validateConnection({
                 host : input.DB_HOST,
                 port : input.DB_PORT,
                 database : input.DB_NAME,
                 username : input.DB_USER,
-                password : input.DB_PASSWORD
+                password : input.DB_PASSWORD,
             });
 
             if (response.status === "E") {
@@ -74,6 +80,7 @@ const initialize = async (input) => {
         } else {
             throw("pgAPI - failed to initialize - invalid input parameters");
         }
+
     } catch(e) {
         throw(e)
     }
