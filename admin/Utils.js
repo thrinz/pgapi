@@ -23,7 +23,7 @@ const { Pool } = require('pg')
 const path = require('path');
 const Q = require("q");
 const fs = require('fs');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 let pool;
 
