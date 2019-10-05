@@ -195,7 +195,7 @@ const addRouteDetail = function(routeInfo) {
             }
             else
             {
-                console.log("Route Object empty");
+                // console.log("Route Object empty");
             }
         }
     }
@@ -265,7 +265,7 @@ const deleteRoute = function (url) {
             }
             else
             {
-                console.log("Route Object empty");
+                // console.log("Route Object empty");
             }
         }
     }
