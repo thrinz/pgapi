@@ -1,6 +1,6 @@
 {
   "name": "@thrinz/pgapi",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "pgAPI - Database as a service",
   "main": "index.js",
   "scripts": {
